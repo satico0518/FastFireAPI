@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const loginRoutes = require('../routes/login');
 const userRouter = require('../routes/user');
+const { dbConnection } = require('../database/config');
 
 class Server {
   constructor() {
@@ -12,8 +13,13 @@ class Server {
     this.loginPath = '/api/login';
     this.usersPath = '/api/users';
 
+    this.startDB();
     this.middlewares();
     this.routes();
+  }
+
+  async startDB() {
+      await dbConnection();
   }
 
   middlewares() {
