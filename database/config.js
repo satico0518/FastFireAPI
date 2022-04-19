@@ -6,7 +6,7 @@ const dbConnection = async () => {
         console.info('DB online!');
     } catch (error) {
         console.error(error);
-        throw new Error('Error trying to connect to mongo db')
+        throw new Error('Error trying to connect to mongo db.')
     }
 }
 
