@@ -5,7 +5,7 @@ const User = require('../models/user');
 const createJWT = require('../helpers/create-jwt');
 
 const loginPost = async (req = request, res = response) => {
-  const { user, password } = req.body;
+  const { user, password, deviceId } = req.body;
 
   try {
     const userDB = await User.findOne({ identification: user});
@@ -17,6 +17,9 @@ const loginPost = async (req = request, res = response) => {
     }
     if(!bcryptjs.compareSync(password, userDB.password)){
       return res.status(400).json({error: 'Usuario o Contrasena incorrecto!'});
+    }
+    if (userDB.deviceId !== deviceId){
+      return res.status(400).json({error: 'Dispositivo no coincide, ingrese desde su telefono!'});
     }
     const token = await createJWT(userDB._id);
     res.json({

@@ -14,7 +14,7 @@ const verifyJWT = async (req = request, res = response, next) => {
     if (!user) {
       return res
         .status(400)
-        .json({ error: { msg: 'Usuario no existe en DB!' } });
+        .json({ error: { msg: 'Usuario no existe en la BD!' } });
     }
     if (!user.isActive) {
       return res

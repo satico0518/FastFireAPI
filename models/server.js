@@ -4,14 +4,18 @@ const cors = require('cors');
 
 const authRoutes = require('../routes/auth');
 const userRouter = require('../routes/user');
+const turnRouter = require('../routes/turn');
+
 const { dbConnection } = require('../database/config');
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
+  
     this.authPath = '/api/auth/';
     this.usersPath = '/api/users';
+    this.turnsPath = '/api/turns';
 
     this.startDB();
     this.middlewares();
@@ -31,11 +35,12 @@ class Server {
   routes() {
     this.app.use(this.authPath, authRoutes);
     this.app.use(this.usersPath, userRouter);
+    this.app.use(this.turnsPath, turnRouter);
   }
 
   listen() {
     this.app.listen(this.port, () => {
-      console.log(`Example app listening on port ${this.port}`);
+      console.log(`FF API listening on port ${this.port}`);
     });
   }
 }

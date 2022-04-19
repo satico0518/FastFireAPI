@@ -19,10 +19,9 @@ const userByIdGet = async (req = request, res = response) => {
 
 const userPost = async (req = request, res = response) => {
   try {
-    const { identification, password, name } = req.body;
-    const user = new User({ identification, password, name });
+    const user = new User(req.body);
     const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
+    user.password = bcryptjs.hashSync(req.body.password, salt);
 
     await user.save();
 

@@ -1,7 +1,10 @@
 const { Schema, model } = require('mongoose');
-const Role = require('./role');
 
 const UserSchema = Schema({
+    deviceId: {
+        type: String,
+        required: [true, 'El Id del dispositivo es obligatorio'],
+    },
     identification: {
         type: String,
         required: [true, 'El documento es obligatorio'],
@@ -24,9 +27,9 @@ const UserSchema = Schema({
         enum: ['ADMIN_ROLE', 'SUPERVISOR_ROLE', 'USER_ROLE'],
         default: 'USER_ROLE',
     },
-    date: { 
+    createdDate: { 
         type: Date, 
-        default: Date.now 
+        default: Date.now()
     },
     isActive: {
         type: Boolean,

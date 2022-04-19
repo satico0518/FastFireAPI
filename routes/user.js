@@ -24,6 +24,7 @@ router.get('/:id',[
 router.post('/', [
     check('identification').custom(userExists),
     check('identification', 'La identificacion no es correcta').isNumeric(),
+    check('deviceId', 'El ID del dispositivo es obligatorio').notEmpty(),
     check('password', 'La contrasena debe tener minimo 6 caracteres').isLength({min: 6}),
     check('role').custom(roleValidation),
     fieldValidation
