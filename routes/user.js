@@ -3,12 +3,24 @@ const { check } = require('express-validator');
 
 const { userGet, userByIdGet, userPost, updateUserPut, updateUserDelete } = require('../controllers/user');
 const { roleValidation, userExists, userExistsById } = require('../helpers/db-validators');
-const { fieldValidation } = require('../middlewares/fieldValidations');
+
+const { fieldValidation } = require('../middlewares/field-validations');
+const { verifyJWT } = require('../middlewares/verify-jwt');
+const { verifyRoles } = require('../middlewares/verify-roles');
 
 const router = Router();
 
-router.get('/', userGet);
-router.get('/:id', userByIdGet);
+router.get('/', [
+    verifyJWT,
+    verifyRoles('ADMIN_ROLE', 'SUPERVISOR_ROLE'),
+], userGet);
+router.get('/:id',[
+    verifyJWT,
+    verifyRoles('ADMIN_ROLE', 'SUPERVISOR_ROLE'),
+    check('id', 'No es un Id Valido').isMongoId(),
+    check('id').custom(userExistsById),
+    fieldValidation
+], userByIdGet);
 router.post('/', [
     check('identification').custom(userExists),
     check('identification', 'La identificacion no es correcta').isNumeric(),
@@ -17,12 +29,16 @@ router.post('/', [
     fieldValidation
 ], userPost);
 router.put('/:id', [
+    verifyJWT,
+    verifyRoles('ADMIN_ROLE', 'SUPERVISOR_ROLE'),
     check('id', 'No es un Id Valido').isMongoId(),
     check('id').custom(userExistsById),
     check('role').custom(roleValidation),
     fieldValidation
 ], updateUserPut);
 router.delete('/:id', [
+    verifyJWT,
+    verifyRoles('ADMIN_ROLE'),
     check('id', 'No es un Id Valido').isMongoId(),
     check('id').custom(userExistsById),
     fieldValidation

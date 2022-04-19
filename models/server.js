@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-const loginRoutes = require('../routes/login');
+const authRoutes = require('../routes/auth');
 const userRouter = require('../routes/user');
 const { dbConnection } = require('../database/config');
 
@@ -10,7 +10,7 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
-    this.loginPath = '/api/login';
+    this.authPath = '/api/auth/';
     this.usersPath = '/api/users';
 
     this.startDB();
@@ -29,7 +29,7 @@ class Server {
   }
 
   routes() {
-    this.app.use(this.loginPath, loginRoutes);
+    this.app.use(this.authPath, authRoutes);
     this.app.use(this.usersPath, userRouter);
   }
 

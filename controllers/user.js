@@ -11,9 +11,10 @@ const userGet = async (req, res = response) => {
   res.json({ total, users });
 };
 
-const userByIdGet = (req = request, res = response) => {
+const userByIdGet = async (req = request, res = response) => {
   const { id } = req.params;
-  res.json({ msg: `usuario con id ${id}` });
+  const user = await User.findById(id);
+  res.json(user);
 };
 
 const userPost = async (req = request, res = response) => {
@@ -42,14 +43,14 @@ const updateUserPut = async (req = request, res = response) => {
   }
 
   await User.findByIdAndUpdate(id, rest);
-  res.json({ msg: 'user updated', id });
+  res.json({ msg: 'user updated', id, authed_user: req.user });
 };
 
 const updateUserDelete = async (req = request, res = response) => {
     const { id } = req.params;
   
     await User.findByIdAndUpdate(id, {isActive: false});
-    res.json({ msg: 'user inactivated', id });
+    res.json({ msg: 'user inactivated', id, authed_user: req.user });
   };
 
 module.exports = {
