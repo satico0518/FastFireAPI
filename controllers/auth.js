@@ -31,6 +31,11 @@ const loginPost = async (req = request, res = response) => {
   }
 };
 
+const tokenCheck = (req, res = response) => {
+  res.json({token: 'ok'});
+}
+
 module.exports = {
   loginPost,
+  tokenCheck,
 };
