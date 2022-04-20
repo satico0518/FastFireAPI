@@ -11,6 +11,11 @@ const userGet = async (req, res = response) => {
   res.json({ total, users });
 };
 
+const userInactiveGet = async (req, res = response) => {
+  const users = await User.find({ isActive: false })
+  res.json(users);
+};
+
 const userByIdGet = async (req = request, res = response) => {
   const { id } = req.params;
   const user = await User.findById(id);
@@ -54,6 +59,7 @@ const updateUserDelete = async (req = request, res = response) => {
 
 module.exports = {
   userGet,
+  userInactiveGet,
   userByIdGet,
   userPost,
   updateUserPut,
