@@ -12,11 +12,11 @@ const loginPost = async (req = request, res = response) => {
     if (!userDB){
       return res.status(400).json({error: 'Usuario o Contrasena incorrecto!'});
     }
-    if (!userDB.isActive) {
-      return res.status(400).json({error: 'Usuario registrado pero no activo, solicite su activacion!'});
-    }
     if(!bcryptjs.compareSync(password, userDB.password)){
       return res.status(400).json({error: 'Usuario o Contrasena incorrecto!'});
+    }
+    if (!userDB.isActive) {
+      return res.status(400).json({error: 'Usuario registrado pero no activo, solicite su activacion!'});
     }
     if (userDB.deviceId !== deviceId){
       return res.status(400).json({error: 'Dispositivo no coincide, ingrese desde su telefono!'});
