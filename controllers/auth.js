@@ -23,7 +23,7 @@ const loginPost = async (req = request, res = response) => {
     }
     const token = await createJWT(userDB._id);
     res.json({
-      msg: 'Login OK',
+      user: userDB,
       token,
     });
   } catch (error) {
