@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 const { userGet, userByIdGet, userPost, updateUserPut, updateUserDelete } = require('../controllers/user');
-const { roleValidation, userExists, userExistsById } = require('../helpers/db-validators');
+const { roleValidation, userExists, userExistsById, deviceIdExists } = require('../helpers/db-validators');
 
 const { fieldValidation } = require('../middlewares/field-validations');
 const { verifyJWT } = require('../middlewares/verify-jwt');
@@ -25,6 +25,7 @@ router.post('/', [
     check('identification').custom(userExists),
     check('identification', 'La identificacion no es correcta').isNumeric(),
     check('deviceId', 'El ID del dispositivo es obligatorio').notEmpty(),
+    check('deviceId').custom(deviceIdExists),
     check('password', 'La contrasena debe tener minimo 6 caracteres').isLength({min: 6}),
     check('role').custom(roleValidation),
     fieldValidation

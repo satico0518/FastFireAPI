@@ -15,6 +15,13 @@ const userExists = async (identification) => {
     }
 }
 
+const deviceIdExists = async (deviceId) => {
+    const deviceIdExists = await User.findOne({ deviceId });
+    if (deviceIdExists) {
+      throw new Error(`Ya existe un usuario registrado con este dispositivo!`)
+    }
+}
+
 const userExistsById = async (id) => {
     const userExists = await User.findById(id);
     if (!userExists) {
@@ -25,5 +32,6 @@ const userExistsById = async (id) => {
 module.exports = {
     roleValidation,
     userExists,
+    deviceIdExists,
     userExistsById,
 };
