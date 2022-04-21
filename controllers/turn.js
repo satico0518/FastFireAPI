@@ -1,12 +1,28 @@
-const { request } = require('express');
-const { response } = require('express');
+const { request, response } = require('express');
 const { distance } = require('../helpers/distance');
 const Turn = require('../models/turn');
 
 const turnsByUIDGet = async (req = request, res = response) => {
   try {
-    const uid = req.params.uid;
-    const turns = await Turn.find({ user: uid });
+    let turns = [];
+    const { uid } = req.params;
+    const { date } = req.query;
+
+    if (date) {
+      const initDate = new Date(date);
+      const endDate = new Date(date)
+      endDate.setDate(initDate.getDate() + 1);
+      turns = await Turn.find({
+        user: uid,
+        timeIn: {
+          $gte: initDate,
+          $lt: endDate,
+        },
+      });
+    } else {
+      turns = await Turn.find({ user: uid });
+    }
+
     res.json(turns);
   } catch (error) {
     console.error(error);
@@ -30,7 +46,9 @@ const turnsFinishPut = async (req = request, res = response) => {
     const { id } = req.params;
     const turn = await Turn.findById(id);
     if (!turn) {
-        return res.status(400).json({error: {msg: `Id [${id}] de turno no existe`}});
+      return res
+        .status(400)
+        .json({ error: { msg: `Id [${id}] de turno no existe` } });
     }
     const klms = distance(
       Number(turn.locationIn.lat),
@@ -38,16 +56,17 @@ const turnsFinishPut = async (req = request, res = response) => {
       Number(req.body.locationOut.lat),
       Number(req.body.locationOut.long)
     );
-    
+
     if (klms > 1) {
-      return res
-        .status(400)
-        .json({
-          error: { msg: `El punto de salida no coincide con el punto de ingreso [${klms} klms]` },
-        });
+      return res.status(400).json({
+        error: {
+          msg: `El punto de salida no coincide con el punto de ingreso [${klms} klms]`,
+        },
+      });
     }
-    
-    turn.totalTimeMins = (new Date(req.body.timeOut) - turn.timeIn)/(1000*60);
+
+    turn.totalTimeMins =
+      (new Date(req.body.timeOut) - turn.timeIn) / (1000 * 60);
     turn.locationOut = req.body.locationOut;
     turn.timeOut = req.body.timeOut;
     await turn.save();
