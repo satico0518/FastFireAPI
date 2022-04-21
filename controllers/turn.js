@@ -11,11 +11,9 @@ const turnsByUIDGet = async (req = request, res = response) => {
     if (date) {
       const initDate = new Date(date);
       initDate.setHours(initDate.getHours() +5);
-      console.log('init date: ', initDate);
       const endDate = new Date(date)
       endDate.setDate(initDate.getDate() + 1);
       endDate.setHours(endDate.getHours() +5);
-      console.log('end date: ', endDate);
       turns = await Turn.find({
         user: uid,
         timeIn: {
