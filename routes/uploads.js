@@ -6,11 +6,11 @@ const { verifyJWT } = require('../middlewares/verify-jwt');
 
 const router = Router();
 
-router.post('/:to', [
-    verifyJWT,
-    check('to').isIn(['avatar']),
-    check('uid').isMongoId(),
-    fieldValidation,
+router.post('/:to/:uid', [
+    // verifyJWT,
+    // check('to').isIn(['avatar']),
+    // check('uid').isMongoId(),
+    // fieldValidation,
 ], fileUploads);
 
 module.exports = router;

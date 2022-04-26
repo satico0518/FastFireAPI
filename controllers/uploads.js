@@ -12,7 +12,7 @@ const fileUploads = async (req = request, res = response) => {
   try {
     let model;
     const { to: folder } = req.params;
-    const { uid } = req.body;
+    const { uid } = req.params;
 
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
       res.status(400).send({ error: 'No files were uploaded.' });
@@ -30,13 +30,11 @@ const fileUploads = async (req = request, res = response) => {
       if (model.img) {
         const splittedImg = model.img.split('/');
         const [imgCloudId] = splittedImg[splittedImg.length - 1].split('.');
-        console.log('imgCloudId: ', imgCloudId);
         cloudinary.uploader.destroy(
           `${folder}/${imgCloudId}`,
           { invalidate: true, resource_type: 'image' },
-          (err, result) => {
-            console.error('error destruyendo img: ', err);
-            console.log('result destroy: ', result);
+          (err, ) => {
+            if(error) console.error('error destruyendo img: ', err);
           }
         );
       }
