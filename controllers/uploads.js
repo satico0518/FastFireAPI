@@ -1,8 +1,5 @@
 const { request } = require('express');
 const { response } = require('express');
-const fs = require('fs');
-const path = require('path');
-const { fileUpload } = require('../helpers/upload-file');
 const User = require('../models/user');
 
 const cloudinary = require('cloudinary').v2;
@@ -33,8 +30,8 @@ const fileUploads = async (req = request, res = response) => {
         cloudinary.uploader.destroy(
           `${folder}/${imgCloudId}`,
           { invalidate: true, resource_type: 'image' },
-          (err, ) => {
-            if(error) console.error('error destruyendo img: ', err);
+          (err, _) => {
+            if(err) console.error('error destruyendo img: ', err);
           }
         );
       }

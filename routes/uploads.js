@@ -6,7 +6,7 @@ const { verifyJWT } = require('../middlewares/verify-jwt');
 
 const router = Router();
 
-router.post('/:to/:uid', [
+router.put('/:to/:uid', [
     // verifyJWT,
     // check('to').isIn(['avatar']),
     // check('uid').isMongoId(),
