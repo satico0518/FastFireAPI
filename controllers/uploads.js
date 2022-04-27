@@ -1,5 +1,6 @@
 const { request } = require('express');
 const { response } = require('express');
+const fs = require('fs')
 const User = require('../models/user');
 
 const cloudinary = require('cloudinary').v2;
@@ -11,10 +12,13 @@ const fileUploads = async (req = request, res = response) => {
     const { to: folder } = req.params;
     const { uid } = req.params;
 
-    // if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
-    //   res.status(400).send({ error: 'No files were uploaded.' });
-    //   return;
-    // }
+    if (!req.body || !req.body) {
+      res.status(400).send({ error: 'No files were uploaded.' });
+      return;
+    }
+
+    fs.writeFile("example.jpg", req.body.base64, 'base64', console.log);
+    // const files = req.body._parts.files;
 
     // const { secure_url } = await cloudinary.uploader.upload(
     //   req.files.file.tempFilePath,
@@ -40,10 +44,10 @@ const fileUploads = async (req = request, res = response) => {
     // await model.save();
     // res.json({ model });
     console.log('**********************************************************');
-    console.log('body: ', req);
-    console.log('files', req.body._parts);
+    // console.log('body: ', req);
+    // console.log('files', req.body._parts.files);
     console.log('##############################################################');
-    res.json({ folder, uid });
+    res.json({ folder, uid, body: req.body, files: req.files });
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: `Error actualizando imagen`, err });
