@@ -40,7 +40,8 @@ const fileUploads = async (req = request, res = response) => {
     // await model.save();
     // res.json({ model });
     console.log('**********************************************************');
-    console.log(req.body);
+    console.log('body: ', req.body);
+    console.log('files', req.files);
     console.log('##############################################################');
     res.json({ folder, uid });
   } catch (err) {
