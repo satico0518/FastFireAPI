@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const fileUpload = require('express-fileupload');
 
 const authRoutes = require('../routes/auth');
 const userRouter = require('../routes/user');
@@ -33,11 +32,6 @@ class Server {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.static('public'));
-    this.app.use(fileUpload({
-      useTempFiles : true,
-      tempFileDir : '/tmp/',
-      createParentPath: true
-  }));
   }
 
   routes() {
