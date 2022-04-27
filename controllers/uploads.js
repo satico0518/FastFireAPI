@@ -11,10 +11,10 @@ const fileUploads = async (req = request, res = response) => {
     const { to: folder } = req.params;
     const { uid } = req.params;
 
-    if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
-      res.status(400).send({ error: 'No files were uploaded.' });
-      return;
-    }
+    // if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
+    //   res.status(400).send({ error: 'No files were uploaded.' });
+    //   return;
+    // }
 
     // const { secure_url } = await cloudinary.uploader.upload(
     //   req.files.file.tempFilePath,
@@ -39,10 +39,13 @@ const fileUploads = async (req = request, res = response) => {
     // model.img = secure_url;
     // await model.save();
     // res.json({ model });
-    res.json({ folder, uid, files: req.files });
+    console.log('**********************************************************');
+    console.log(req);
+    console.log('##############################################################');
+    res.json({ folder, uid });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ err: `Error actualizando imagen de ${folder}` });
+    res.status(500).json({ err: `Error actualizando imagen`, err });
   }
 };
 
