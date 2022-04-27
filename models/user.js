@@ -5,6 +5,9 @@ const UserSchema = Schema({
         type: String,
         required: [true, 'El Id del dispositivo es obligatorio'],
     },
+    deviceIdFailed: {
+        type: String,
+    },
     identification: {
         type: String,
         required: [true, 'El documento es obligatorio'],

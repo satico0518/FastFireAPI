@@ -21,16 +21,16 @@ const loginPost = async (req = request, res = response) => {
         .json({ error: 'Usuario o Contrasena incorrecto!' });
     }
     if (!userDB.isActive) {
-      return res
-        .status(400)
-        .json({
-          error: 'Usuario registrado pero no activo, solicite su activacion!',
-        });
+      return res.status(400).json({
+        error: 'Usuario registrado pero no activo, solicite su activacion!',
+      });
     }
     if (userDB.deviceId !== deviceId) {
+      userDB.deviceIdFailed = deviceId;
+      userDB.save();
       return res
         .status(400)
-        .json({ error: 'Dispositivo no coincide, ingrese desde su telefono!' });
+        .json({ error: 'Dispositivo no coincide, ingrese desde su teléfono!. Si perdió su teléfono, avísele a su supervisor!' });
     }
     const token = await createJWT(userDB._id);
     res.json({
