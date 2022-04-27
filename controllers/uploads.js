@@ -41,7 +41,7 @@ const fileUploads = async (req = request, res = response) => {
     // res.json({ model });
     console.log('**********************************************************');
     console.log('body: ', req);
-    console.log('files', req.files);
+    console.log('files', req.body._parts);
     console.log('##############################################################');
     res.json({ folder, uid });
   } catch (err) {
