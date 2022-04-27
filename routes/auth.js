@@ -1,19 +1,37 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { loginPost, tokenCheck } = require('../controllers/auth');
+const {
+  loginPost,
+  tokenCheck,
+  changeDeviceID,
+} = require('../controllers/auth');
 const { fieldValidation } = require('../middlewares/field-validations');
 const { verifyJWT } = require('../middlewares/verify-jwt');
 
 const router = Router();
 
-router.post('/login', [
+router.post(
+  '/login',
+  [
     check('deviceId', 'El Id del dispositivo es obligatorio!').notEmpty(),
     check('user', 'Usuario es obligatorio!').notEmpty(),
     check('password', 'Contrasena es obligatoria!').notEmpty(),
-    fieldValidation
-], loginPost);
+    fieldValidation,
+  ],
+  loginPost
+);
 
-router.get('/check', [ verifyJWT ], tokenCheck);
+router.put(
+  '/device',
+  [
+    verifyJWT,
+    check('uid', 'El Id del usuario a modificar es obligatorio!').notEmpty().isMongoId(),
+    check('deviceId', 'El nuevo Id del dispositivo es obligatorio!').notEmpty(),
+    fieldValidation,
+  ],
+  changeDeviceID,
+);
 
+router.get('/check', [verifyJWT], tokenCheck);
 
 module.exports = router;
