@@ -59,7 +59,7 @@ const turnsFinishPut = async (req = request, res = response) => {
       Number(req.body.locationOut.long)
     );
 
-    if (klms > 1) {
+    if (klms > 0.3) {
       return res.status(400).json({
         error: {
           msg: `El punto de salida no coincide con el punto de ingreso [${klms} klms]`,
