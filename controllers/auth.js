@@ -65,6 +65,25 @@ const changeDeviceID = async (req = request, res = response) => {
   }
 };
 
+const changePass = async (req = request, res = response) => {
+  try {
+    const { uid, password } = req.body;
+    User.findById(uid, (err, user) => {
+      if (err) {
+        throw new Error('Error buscando usuario');
+      }
+    const salt = bcryptjs.genSaltSync();
+    user.password = bcryptjs.hashSync(password, salt);
+    user.save();
+    });
+    return res.json({ msg: 'Contraseña actualizada exitosamente!' });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: 'Error cambiando Contraseña' });
+  }
+};
+
 const tokenCheck = async (req = request, res = response) => {
   try {
     const token = req.header('x-auth-token');
@@ -83,4 +102,5 @@ module.exports = {
   loginPost,
   changeDeviceID,
   tokenCheck,
+  changePass
 };

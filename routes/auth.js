@@ -4,6 +4,7 @@ const {
   loginPost,
   tokenCheck,
   changeDeviceID,
+  changePass,
 } = require('../controllers/auth');
 const { fieldValidation } = require('../middlewares/field-validations');
 const { verifyJWT } = require('../middlewares/verify-jwt');
@@ -15,7 +16,7 @@ router.post(
   [
     check('deviceId', 'El Id del dispositivo es obligatorio!').notEmpty(),
     check('user', 'Usuario es obligatorio!').notEmpty(),
-    check('password', 'Contrasena es obligatoria!').notEmpty(),
+    check('password', 'Contraseña es obligatoria!').notEmpty(),
     fieldValidation,
   ],
   loginPost
@@ -25,11 +26,22 @@ router.put(
   '/device',
   [
     verifyJWT,
-    check('uid', 'El Id del usuario a modificar es obligatorio!').notEmpty().isMongoId(),
+    check('uid', 'El Id del usuario a modificar es obligatorio!').isMongoId(),
     check('deviceId', 'El nuevo Id del dispositivo es obligatorio!').notEmpty(),
     fieldValidation,
   ],
   changeDeviceID,
+);
+
+router.put(
+  '/password',
+  [
+    verifyJWT,
+    check('uid', 'El Id del usuario a modificar es obligatorio!').isMongoId(),
+    check('password', 'La contraseña es obligatoria!').notEmpty(),
+    fieldValidation,
+  ],
+  changePass,
 );
 
 router.get('/check', [verifyJWT], tokenCheck);
