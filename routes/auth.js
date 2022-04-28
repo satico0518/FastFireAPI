@@ -36,8 +36,8 @@ router.put(
 router.put(
   '/password',
   [
-    verifyJWT,
-    check('uid', 'El Id del usuario a modificar es obligatorio!').isMongoId(),
+    check('deviceId', 'El Id del dispositivo es obligatorio!').notEmpty(),
+    check('identification', 'Identificación del usuario es obligatorio!').notEmpty(),
     check('password', 'La contraseña es obligatoria!').notEmpty(),
     fieldValidation,
   ],

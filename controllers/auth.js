@@ -67,15 +67,26 @@ const changeDeviceID = async (req = request, res = response) => {
 
 const changePass = async (req = request, res = response) => {
   try {
-    const { uid, password } = req.body;
-    User.findById(uid, (err, user) => {
-      if (err) {
-        throw new Error('Error buscando usuario');
-      }
+    const { identification, deviceId, password } = req.body;
+    const userDB = await User.findOne({ identification });
+    if (!userDB) {
+      return res.status(400).json({ error: 'Usuario no existe en la BD!' });
+    }
+
+    // Valida que intente recuperar la contrasena desde su dispositivo, pero si por alguna razon
+    // perdio su dispositivo y adicionalmente no recuerda la contrasena, se debe avisar a soporte 
+    // para modificar por POSTMAN el device id a 'FF12345' de esa manera le permite cambiar el password
+    // sim embargo cuando intente ingresar no lo va a dejar por el dispositivo id que es diferente
+    // asi que debe tratar de ingresar y despues el administrador puede por el modulo de 'Administrar usuarios'
+    // permitirle cambiar el dispositivo id para que ingrese nuevamente
+    if (userDB.deviceId !== deviceId && deviceId !== 'FF12345') {
+      return res.status(400).json({error: 'Debe recuperar la contraseña desde su dispositivo!'})
+    }
+
     const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
-    user.save();
-    });
+    userDB.password = bcryptjs.hashSync(password, salt);
+    userDB.save();
+
     return res.json({ msg: 'Contraseña actualizada exitosamente!' });
   } catch (error) {
     return res
