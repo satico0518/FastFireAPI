@@ -79,8 +79,26 @@ const turnsFinishPut = async (req = request, res = response) => {
   }
 };
 
+const turnsExtraHourReasonPut = async (req = request, res = response) => {
+  try {
+    const { id } = req.params;
+    const {reason} = req.body;
+    const turn = await Turn.findByIdAndUpdate(id, {extraHourReason: reason});
+    if (!turn) {
+      return res
+        .status(400)
+        .json({ error: { msg: `Id [${id}] de turno no existe` } });
+    }
+    res.json({turn});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};
+
 module.exports = {
   turnsByUIDGet,
   turnsInitPost,
   turnsFinishPut,
+  turnsExtraHourReasonPut
 };
