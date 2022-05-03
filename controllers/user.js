@@ -3,12 +3,12 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 
 const userGet = async (req, res = response) => {
-  const users = await User.find();
+  const users = await User.find({ isDeleted: false });
   res.json(users);
 };
 
 const userInactiveGet = async (req, res = response) => {
-  const users = await User.find({ isActive: false })
+  const users = await User.find({ isActive: false, isDeleted: false });
   res.json(users);
 };
 
@@ -47,11 +47,11 @@ const updateUserPut = async (req = request, res = response) => {
 };
 
 const updateUserDelete = async (req = request, res = response) => {
-    const { id } = req.params;
-  
-    await User.findByIdAndUpdate(id, {isActive: false});
-    res.json({ msg: 'user inactivated', id, authed_user: req.user });
-  };
+  const { id } = req.params;
+
+  await User.findByIdAndUpdate(id, { isActive: false, isDeleted: true });
+  res.json({ msg: 'user deleted', id, authed_user: req.user });
+};
 
 module.exports = {
   userGet,

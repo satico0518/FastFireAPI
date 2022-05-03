@@ -13,16 +13,21 @@ const loginPost = async (req = request, res = response) => {
     if (!userDB) {
       return res
         .status(400)
-        .json({ error: 'Usuario o Contrasena incorrecto!' });
+        .json({ error: 'Usuario o Contraseña incorrecto!' });
     }
     if (!bcryptjs.compareSync(password, userDB.password)) {
       return res
         .status(400)
-        .json({ error: 'Usuario o Contrasena incorrecto!' });
+        .json({ error: 'Usuario o Contraseña incorrecto!' });
     }
-    if (!userDB.isActive) {
+    if (!userDB.isActive && !userDB.isDeleted) {
       return res.status(400).json({
-        error: 'Usuario registrado pero no activo, solicite su activacion!',
+        error: 'Usuario registrado pero no activo, solicite su activación!',
+      });
+    }
+    if (!userDB.isActive && userDB.isDeleted) {
+      return res.status(400).json({
+        error: 'Usuario no activo!',
       });
     }
     if (userDB.deviceId !== deviceId) {

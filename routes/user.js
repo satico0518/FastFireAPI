@@ -27,11 +27,13 @@ router.get(
   [verifyJWT, verifyRoles('ADMIN_ROLE', 'SUPERVISOR_ROLE')],
   userGet
 );
+
 router.get(
   '/inactive',
-  [verifyJWT, verifyRoles('ADMIN_ROLE', 'SUPERVISOR_ROLE')],
+  [verifyJWT, verifyRoles('ADMIN_ROLE')],
   userInactiveGet
 );
+
 router.get(
   '/:id',
   [
@@ -43,6 +45,7 @@ router.get(
   ],
   userByIdGet
 );
+
 router.post(
   '/',
   [
@@ -71,6 +74,7 @@ router.put(
   ],
   updateUserPut
 );
+
 router.delete(
   '/:id',
   [
