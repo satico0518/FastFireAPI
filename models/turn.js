@@ -34,6 +34,9 @@ const TurnSchema = Schema({
   extraHourReason: {
     type: String,
   },
+  isManualFinished: {
+    type: Boolean,
+  },
 });
 
 module.exports = model('Turn', TurnSchema);
