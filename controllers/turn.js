@@ -71,6 +71,10 @@ const turnsFinishPut = async (req = request, res = response) => {
       (new Date(req.body.timeOut) - turn.timeIn) / (1000 * 60);
     turn.locationOut = req.body.locationOut;
     turn.timeOut = req.body.timeOut;
+
+    if (req.body.isManualFinished)
+      turn.isManualFinished = req.body.isManualFinished;
+
     await turn.save();
     res.status(200).json(turn);
   } catch (error) {
